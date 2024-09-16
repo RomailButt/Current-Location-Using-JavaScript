@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Current Location</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        a {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        a:hover {
+            background-color: #0056b3;
+        }
+
+        .message {
+            margin-top: 20px;
+            color: green;
+            font-size: 14px;
+        }
+
+        .loading {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Find Your Current Location</h1>
+        <a href="#" id="location" target="_blank">Click to open your location on Google Maps</a>
+        <p id="message" class="message"></p>
+    </div>
+
+    <script>
+        const locationLink = document.getElementById('location');
+        const message = document.getElementById('message');
+
+        if (navigator.geolocation) {
+            message.textContent = "Fetching your current location...";
+            message.classList.add('loading');
+            
+            navigator.geolocation.getCurrentPosition(function (position) {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+                const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
+                locationLink.setAttribute('href', mapUrl);
+                locationLink.textContent = "Click to view your location on Google Maps";
+                message.textContent = "Location fetched successfully!";
+                message.classList.remove('loading');
+            }, function (error) {
+                message.textContent = "Unable to fetch location. Please check your location settings.";
+                console.error('Error Code = ' + error.code + ' - ' + error.message);
+            });
+        } else {
+            message.textContent = "Geolocation is not supported by your browser.";
+        }
+    </script>
+
+</body>
+
+</html>
